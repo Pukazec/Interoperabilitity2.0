@@ -1,6 +1,7 @@
 ﻿using Dtos;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Windows;
@@ -15,7 +16,7 @@ namespace FePart
         private readonly HttpClient _httpClient;
         private readonly Cat? _selectedCat;
 
-        public AddCatWindow(Cat? selectedCat)
+        public AddCatWindow(Cat? selectedCat, int? getById)
         {
             InitializeComponent();
             _httpClient = new HttpClient();
@@ -25,6 +26,19 @@ namespace FePart
             {
                 _selectedCat = selectedCat;
                 FillCatInformation();
+            }
+            else if (getById != null)
+            {
+                HttpResponseMessage response = _httpClient.GetAsync($"Cat/{getById}").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    _selectedCat = response.Content.ReadFromJsonAsync<Cat>().Result;
+                    FillCatInformation();
+                }
+                else
+                {
+                    MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+                }
             }
             else
             {

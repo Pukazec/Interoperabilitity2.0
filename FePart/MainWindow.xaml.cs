@@ -38,12 +38,17 @@ namespace FePart
 
         private void AddCat_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(null).Show();
+            new AddCatWindow(null, null).Show();
         }
 
         private void EditCat_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(SelectedCat).Show();
+            new AddCatWindow(SelectedCat, null).Show();
+        }
+
+        private void ViewCat_Click(object sender, RoutedEventArgs e)
+        {
+            new AddCatWindow(null, SelectedCat.Id).Show();
         }
 
         private void DeleteCat_Click(object sender, RoutedEventArgs e)
@@ -58,11 +63,13 @@ namespace FePart
                 SelectedCat = (Cat)catGrid.SelectedItem;
                 btnEdit.IsEnabled = true;
                 btnDelete.IsEnabled = true;
+                btnView.IsEnabled = true;
             }
             else
             {
                 btnEdit.IsEnabled = false;
                 btnDelete.IsEnabled = false;
+                btnView.IsEnabled = false;
             }
         }
     }

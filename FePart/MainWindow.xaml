@@ -16,6 +16,7 @@
         <Button Content="Add Cat" HorizontalAlignment="Left" Margin="298,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="AddCat_Click"/>
         <Button x:Name="btnEdit" Content="Edit Cat" HorizontalAlignment="Left" Margin="598,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="EditCat_Click" IsEnabled="False"/>
         <Button x:Name="btnDelete" Content="Delete Cat" HorizontalAlignment="Left" Margin="898,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="DeleteCat_Click" IsEnabled="False"/>
+        <Button x:Name="btnView" Content="View Cat" HorizontalAlignment="Left" Margin="1197,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="ViewCat_Click" IsEnabled="False"/>
         
     </Grid>
     
