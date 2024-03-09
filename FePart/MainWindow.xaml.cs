@@ -38,7 +38,7 @@ namespace FePart
 
         private void AddCat_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow().Show();
+            new AddCatWindow(null).Show();
         }
 
         private void EditCat_Click(object sender, RoutedEventArgs e)

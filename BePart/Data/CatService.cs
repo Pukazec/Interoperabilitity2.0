@@ -35,6 +35,7 @@ namespace BePart.Data
 
         public void AddCat(Cat cat)
         {
+            cat.Id = _cats.Last().Id++;
             _cats.Add(cat);
         }
 

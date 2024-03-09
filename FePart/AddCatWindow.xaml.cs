@@ -15,14 +15,6 @@ namespace FePart
         private readonly HttpClient _httpClient;
         private readonly Cat? _selectedCat;
 
-        public AddCatWindow()
-        {
-            InitializeComponent();
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7082/");
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
-
         public AddCatWindow(Cat? selectedCat)
         {
             InitializeComponent();
@@ -31,22 +23,23 @@ namespace FePart
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (selectedCat != null)
             {
-                // Set the edit flag and selectedCat
                 _selectedCat = selectedCat;
-                FillCatInformation(); // Call method to fill in the cat information
+                FillCatInformation();
+            }
+            else
+            {
+                _selectedCat = null;
             }
         }
 
         private void FillCatInformation()
         {
-            // Ensure _selectedCat is not null
             if (_selectedCat == null) return;
 
-            // Fill in the TextBoxes with the cat's information
             catName.Text = _selectedCat.Name;
             catAge.Text = _selectedCat.Age.ToString();
             catColor.Text = _selectedCat.Color;
-            catSummary.Text = _selectedCat.Summary ?? ""; // Use empty string if Summary is null
+            catSummary.Text = _selectedCat.Summary ?? "";
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -64,7 +57,18 @@ namespace FePart
                 Summary = catSummary.Text
             };
 
-            var response = await _httpClient.PostAsync("Cat", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = null;
+
+            if (_selectedCat != null)
+            {
+                dto.Id = _selectedCat.Id;
+                response = await _httpClient.PutAsync($"Cat/{dto.Id}", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
+            }
+            else
+            {
+                response = await _httpClient.PostAsync("Cat", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
+            }
+
             if (response.IsSuccessStatusCode)
             {
                 Close();
