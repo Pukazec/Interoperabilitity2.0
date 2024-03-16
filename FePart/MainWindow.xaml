@@ -11,12 +11,12 @@
     <Grid >
         <Button Content="Get data" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" Height="54" Width="218" Click="GetData_Click"/>
         <Grid Margin="0,0,0,-52" Height="434" VerticalAlignment="Bottom">
-            <DataGrid x:Name="catGrid" Margin="0,-374,0,116" SelectionChanged="RowSelected" />
+            <DataGrid x:Name="dataGrid" Margin="0,-374,0,116" SelectionChanged="RowSelected" />
         </Grid>
-        <Button Content="Add Cat" HorizontalAlignment="Left" Margin="298,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="AddCat_Click"/>
-        <Button x:Name="btnEdit" Content="Edit Cat" HorizontalAlignment="Left" Margin="598,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="EditCat_Click" IsEnabled="False"/>
-        <Button x:Name="btnDelete" Content="Delete Cat" HorizontalAlignment="Left" Margin="898,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="DeleteCat_Click" IsEnabled="False"/>
-        <Button x:Name="btnView" Content="View Cat" HorizontalAlignment="Left" Margin="1197,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="ViewCat_Click" IsEnabled="False"/>
+        <Button Content="Add" HorizontalAlignment="Left" Margin="298,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="AddHardware_Click"/>
+        <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="598,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="EditHardware_Click" IsEnabled="False"/>
+        <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="898,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="DeleteHardware_Click" IsEnabled="False"/>
+        <Button x:Name="btnView" Content="Views" HorizontalAlignment="Left" Margin="1197,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="ViewHardware_Click" IsEnabled="False"/>
         
     </Grid>
     

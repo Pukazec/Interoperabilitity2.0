@@ -1,4 +1,4 @@
-﻿using Dtos;
+﻿using SharedData;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -12,7 +12,7 @@ namespace FePart
     public partial class MainWindow : Window
     {
         private readonly HttpClient _httpClient;
-        private Cat? SelectedCat { get; set; }
+        private Hardware? SelectedHardware { get; set; }
 
         public MainWindow()
         {
@@ -24,11 +24,11 @@ namespace FePart
 
         private void GetData_Click(object sender, RoutedEventArgs e)
         {
-            HttpResponseMessage response = _httpClient.GetAsync("Cat").Result;
+            HttpResponseMessage response = _httpClient.GetAsync("Hardware").Result;
             if (response.IsSuccessStatusCode)
             {
-                var cats = response.Content.ReadFromJsonAsync<List<Cat>>().Result;
-                catGrid.ItemsSource = cats;
+                var hardwares = response.Content.ReadFromJsonAsync<List<Hardware>>().Result;
+                dataGrid.ItemsSource = hardwares;
             }
             else
             {
@@ -36,31 +36,31 @@ namespace FePart
             }
         }
 
-        private void AddCat_Click(object sender, RoutedEventArgs e)
+        private void AddHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(null, null).Show();
+            new AddHardwareWindow(null, null).Show();
         }
 
-        private void EditCat_Click(object sender, RoutedEventArgs e)
+        private void EditHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(SelectedCat, null).Show();
+            new AddHardwareWindow(SelectedHardware, null).Show();
         }
 
-        private void ViewCat_Click(object sender, RoutedEventArgs e)
+        private void ViewHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(null, SelectedCat.Id).Show();
+            new AddHardwareWindow(null, SelectedHardware.Id).Show();
         }
 
-        private void DeleteCat_Click(object sender, RoutedEventArgs e)
+        private void DeleteHardware_Click(object sender, RoutedEventArgs e)
         {
-            _httpClient.DeleteAsync($"Cat/{SelectedCat.Id}");
+            _httpClient.DeleteAsync($"Hardware/{SelectedHardware.Id}");
         }
 
         private void RowSelected(object sender, RoutedEventArgs e)
         {
-            if (catGrid.SelectedItem != null)
+            if (dataGrid.SelectedItem != null)
             {
-                SelectedCat = (Cat)catGrid.SelectedItem;
+                SelectedHardware = (Hardware)dataGrid.SelectedItem;
                 btnEdit.IsEnabled = true;
                 btnDelete.IsEnabled = true;
                 btnView.IsEnabled = true;
