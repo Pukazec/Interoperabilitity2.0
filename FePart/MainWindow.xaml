@@ -9,15 +9,30 @@
         Title="MainWindow" Height="900" Width="1600"
         WindowStartupLocation="CenterScreen">
     <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
         <Button Content="Get data" HorizontalAlignment="Left" Margin="32,30,0,0" VerticalAlignment="Top" Height="54" Width="218" Click="GetData_Click"/>
-        <Grid Margin="0,0,0,-52" Height="434" VerticalAlignment="Bottom">
-            <DataGrid x:Name="dataGrid" Margin="0,-374,0,116" SelectionChanged="RowSelected" />
-        </Grid>
+        <DataGrid x:Name="dataGrid" Grid.Row="1" Margin="10" SelectionChanged="RowSelected" />
+
         <Button Content="Add" HorizontalAlignment="Left" Margin="298,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="AddHardware_Click"/>
         <Button x:Name="btnEdit" Content="Edit" HorizontalAlignment="Left" Margin="598,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="EditHardware_Click" IsEnabled="False"/>
         <Button x:Name="btnDelete" Content="Delete" HorizontalAlignment="Left" Margin="898,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="DeleteHardware_Click" IsEnabled="False"/>
         <Button x:Name="btnView" Content="Views" HorizontalAlignment="Left" Margin="1197,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="ViewHardware_Click" IsEnabled="False"/>
-        
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
+            <Button x:Name="btnNewReview" Content="Add Review" Margin="5" Click="AddReview_Click" IsEnabled="False"/>
+            <Button x:Name="btnEditReview" Content="Edit Review" Margin="5" Click="EditReview_Click" IsEnabled="False"/>
+            <Button x:Name="btnDeleteReview" Content="Delete Review" Margin="5" Click="DeleteReview_Click" IsEnabled="False"/>
+            <Button x:Name="btnViewReview" Content="View Review" Margin="5" Click="ViewReview_Click" IsEnabled="False"/>
+        </StackPanel>
+
+        <DataGrid x:Name="reviewsDataGrid" Grid.Row="3" Margin="10" SelectionChanged="ReveiwSelected" />
+
     </Grid>
     
 </Window>

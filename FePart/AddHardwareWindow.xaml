@@ -6,18 +6,46 @@
         xmlns:local="clr-namespace:FePart"
         mc:Ignorable="d"
         Title="Add Hardware" Height="450" Width="800">
-    <Grid>
-        <Button Content="Add" HorizontalAlignment="Left" Margin="630,332,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.499,0.468" Height="45" Width="130" Click="Add_Click"/>
-        <Button Content="Close" HorizontalAlignment="Left" Margin="45,332,0,0" VerticalAlignment="Top" Click="Close_Click" Height="45" Width="130"/>
-        <Label Content="Name" HorizontalAlignment="Left" Margin="45,25,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
-        <Label Content="Type" HorizontalAlignment="Left" Margin="45,78,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
-        <Label Content="Code" HorizontalAlignment="Left" Margin="45,130,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
-        <Label Content="Stock" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
-        <Label Content="Price" HorizontalAlignment="Left" Margin="45,225,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
-        <TextBox x:Name="name" HorizontalAlignment="Left" Height="25" Margin="321,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102"/>
-        <TextBox x:Name="type" HorizontalAlignment="Left" Height="25" Margin="321,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102"/>
-        <TextBox x:Name="code" HorizontalAlignment="Left" Height="25" Margin="321,130,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102"/>
-        <TextBox x:Name="stock" HorizontalAlignment="Left" Height="25" Margin="321,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102"/>
-        <TextBox x:Name="price" HorizontalAlignment="Left" Height="25" Margin="321,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102"/>
-    </Grid>
+    <TabControl>
+        <TabItem Header="Hardware">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="142*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Save" HorizontalAlignment="Left" Margin="546,332,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.499,0.468" Height="45" Width="130" Click="Add_Click" Grid.Column="1"/>
+                <Button Content="Close" HorizontalAlignment="Left" Margin="45,332,0,0" VerticalAlignment="Top" Click="Close_Click" Height="45" Width="130" Grid.ColumnSpan="2"/>
+                <Label Content="Name" HorizontalAlignment="Left" Margin="45,25,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Type" HorizontalAlignment="Left" Margin="45,78,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Code" HorizontalAlignment="Left" Margin="45,130,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Stock" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Price" HorizontalAlignment="Left" Margin="45,225,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="name" HorizontalAlignment="Left" Height="25" Margin="236,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="type" HorizontalAlignment="Left" Height="25" Margin="236,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="code" HorizontalAlignment="Left" Height="25" Margin="236,130,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="stock" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="price" HorizontalAlignment="Left" Height="25" Margin="236,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Reviews" x:Name="btnReview">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="17*"/>
+                    <ColumnDefinition Width="142*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="Save" HorizontalAlignment="Left" Margin="546,332,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.499,0.468" Height="45" Width="130" Grid.Column="1" Click="Add2_Click"/>
+                <Button Content="Close" HorizontalAlignment="Left" Margin="45,332,0,0" VerticalAlignment="Top" Click="Close_Click" Height="45" Width="130" Grid.ColumnSpan="2"/>
+                <Label Content="Title" HorizontalAlignment="Left" Margin="45,25,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Text" HorizontalAlignment="Left" Margin="45,78,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Rating" HorizontalAlignment="Left" Margin="45,130,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <Label Content="Hardware" HorizontalAlignment="Left" Margin="45,175,0,0" VerticalAlignment="Top" Height="25" Width="95" Grid.ColumnSpan="2"/>
+                <TextBox x:Name="title" HorizontalAlignment="Left" Height="25" Margin="236,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="text" HorizontalAlignment="Left" Height="25" Margin="236,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="rating" HorizontalAlignment="Left" Height="25" Margin="236,130,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="hardware" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <TextBox x:Name="hardwareId" Visibility="Hidden" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>
+    

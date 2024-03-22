@@ -13,6 +13,7 @@ namespace FePart
     {
         private readonly HttpClient _httpClient;
         private Hardware? SelectedHardware { get; set; }
+        private Review? SelectedReview { get; set; }
 
         public MainWindow()
         {
@@ -38,17 +39,17 @@ namespace FePart
 
         private void AddHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddHardwareWindow(null, null).Show();
+            new AddHardwareWindow(null, null, null).Show();
         }
 
         private void EditHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddHardwareWindow(SelectedHardware, null).Show();
+            new AddHardwareWindow(SelectedHardware, null, null).Show();
         }
 
         private void ViewHardware_Click(object sender, RoutedEventArgs e)
         {
-            new AddHardwareWindow(null, SelectedHardware.Id).Show();
+            new AddHardwareWindow(null, null, SelectedHardware.Id).Show();
         }
 
         private void DeleteHardware_Click(object sender, RoutedEventArgs e)
@@ -64,12 +65,68 @@ namespace FePart
                 btnEdit.IsEnabled = true;
                 btnDelete.IsEnabled = true;
                 btnView.IsEnabled = true;
+                btnNewReview.IsEnabled = true;
+
+                HttpResponseMessage response = _httpClient.GetAsync($"Review").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    try
+                    {
+                        var reviews = response.Content.ReadFromJsonAsync<List<Review>>().Result;
+                        reviewsDataGrid.ItemsSource = reviews;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+                }
             }
             else
             {
                 btnEdit.IsEnabled = false;
                 btnDelete.IsEnabled = false;
                 btnView.IsEnabled = false;
+            }
+        }
+
+        private void AddReview_Click(object sender, RoutedEventArgs e)
+        {
+            new AddHardwareWindow(SelectedHardware, null, null).Show();
+        }
+
+        private void EditReview_Click(object sender, RoutedEventArgs e)
+        {
+            new AddHardwareWindow(null, SelectedReview, null).Show();
+        }
+
+        private void DeleteReview_Click(object sender, RoutedEventArgs e)
+        {
+            _httpClient.DeleteAsync($"Review/{SelectedReview.Id}");
+        }
+
+        private void ViewReview_Click(object sender, RoutedEventArgs e)
+        {
+            new AddHardwareWindow(null, SelectedReview, null).Show();
+        }
+
+        private void ReveiwSelected(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (dataGrid.SelectedItem != null)
+            {
+                SelectedReview = (Review)reviewsDataGrid.SelectedItem;
+                btnEditReview.IsEnabled = true;
+                btnDeleteReview.IsEnabled = true;
+                btnViewReview.IsEnabled = true;
+            }
+            else
+            {
+                btnEditReview.IsEnabled = false;
+                btnDeleteReview.IsEnabled = false;
+                btnViewReview.IsEnabled = false;
             }
         }
     }

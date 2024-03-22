@@ -19,7 +19,7 @@ namespace BePart.Controllers
         public IActionResult GetAllReviews()
         {
             var reviews = _reviewService.GetAllReviews();
-            return Ok(reviews);
+            return Ok(reviews ?? []);
         }
 
         [HttpGet("{id}")]

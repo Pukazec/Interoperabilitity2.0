@@ -12,13 +12,20 @@ namespace FePart
     {
         private readonly HttpClient _httpClient;
         private readonly Hardware? _selectedHardware;
+        private readonly Review? _selectedReview;
 
-        public AddHardwareWindow(Hardware? selectedHardware, int? getById)
+        public AddHardwareWindow(Hardware? selectedHardware, Review? selectedReview, int? getById)
         {
             InitializeComponent();
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri("https://localhost:7082/");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            if (selectedHardware == null && selectedReview == null)
+            {
+                btnReview.IsEnabled = false;
+            }
+
             if (selectedHardware != null)
             {
                 _selectedHardware = selectedHardware;
@@ -41,6 +48,22 @@ namespace FePart
             {
                 _selectedHardware = null;
             }
+            if (selectedReview != null)
+            {
+                _selectedReview = selectedReview;
+                FillReviewInformation();
+            }
+        }
+
+        private void FillReviewInformation()
+        {
+            if (_selectedReview == null) return;
+
+            title.Text = _selectedReview.Title;
+            text.Text = _selectedReview.Text.ToString();
+            rating.Text = _selectedReview.Rating.ToString();
+            hardware.Text = _selectedReview.Hardware?.Name.ToString();
+            hardwareId.Text = _selectedReview.HardwareId.ToString();
         }
 
         private void FillHardwareInformation()
@@ -52,6 +75,7 @@ namespace FePart
             code.Text = _selectedHardware.Code;
             stock.Text = _selectedHardware.Stock.ToString();
             price.Text = _selectedHardware.Price.ToString();
+            hardwareId.Text = _selectedHardware.Id.ToString();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -80,6 +104,38 @@ namespace FePart
             else
             {
                 response = await _httpClient.PostAsync("Hardware", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
+            }
+
+            if (response.IsSuccessStatusCode)
+            {
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+            }
+        }
+
+        private async void Add2_Click(object sender, RoutedEventArgs e)
+        {
+            var dto = new Review()
+            {
+                Title = title.Text,
+                Text = text.Text,
+                Rating = Convert.ToInt32(rating.Text),
+                HardwareId = Convert.ToInt32(_selectedHardware.Id)
+            };
+
+            HttpResponseMessage response = null;
+
+            if (_selectedReview != null)
+            {
+                dto.Id = _selectedReview.Id;
+                response = await _httpClient.PutAsync($"Review/{dto.Id}", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
+            }
+            else
+            {
+                response = await _httpClient.PostAsync("Review", new StringContent(JsonSerializer.Serialize(dto), Encoding.UTF8, "application/json"));
             }
 
             if (response.IsSuccessStatusCode)
