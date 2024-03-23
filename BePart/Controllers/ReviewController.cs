@@ -22,6 +22,13 @@ namespace BePart.Controllers
             return Ok(reviews ?? []);
         }
 
+        [HttpGet("{id}/Hardware")]
+        public IActionResult GetAllReviewsByHardware(int id)
+        {
+            var reviews = _reviewService.GetAllReviewsByHardware(id);
+            return Ok(reviews ?? []);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetReviewById(int id)
         {

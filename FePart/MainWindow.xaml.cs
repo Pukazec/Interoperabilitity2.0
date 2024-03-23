@@ -67,7 +67,7 @@ namespace FePart
                 btnView.IsEnabled = true;
                 btnNewReview.IsEnabled = true;
 
-                HttpResponseMessage response = _httpClient.GetAsync($"Review").Result;
+                HttpResponseMessage response = _httpClient.GetAsync($"Review/{SelectedHardware.Id}/Hardware").Result;
                 if (response.IsSuccessStatusCode)
                 {
                     try

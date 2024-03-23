@@ -5,6 +5,7 @@ namespace BePart.Data
     public interface IReviewService
     {
         List<Review> GetAllReviews();
+        List<Review> GetAllReviewsByHardware(int id);
         Review GetReviewById(int id);
         void AddReview(Review review);
         void UpdateReview(Review review);
@@ -30,6 +31,17 @@ namespace BePart.Data
             };
 
             return _reviews;
+        }
+
+        public List<Review> GetAllReviewsByHardware(int id)
+        {
+            var hardwareReviews = _reviews.Where(x => x.HardwareId == id);
+            foreach (var item in hardwareReviews)
+            {
+                item.Hardware = _hardwareService.GetHardwareById(item.HardwareId);
+            };
+
+            return hardwareReviews.ToList();
         }
 
         public Review GetReviewById(int id)
