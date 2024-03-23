@@ -25,7 +25,7 @@
         <Button x:Name="btnView" Content="Views" HorizontalAlignment="Left" Margin="1197,30,0,0" VerticalAlignment="Top" Height="54" Width="260" Click="ViewHardware_Click" IsEnabled="False"/>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10">
-            <Button x:Name="btnNewReview" Content="Add Review" Margin="5" Click="AddReview_Click" IsEnabled="False"/>
+            <Button x:Name="btnNewReview" Content="Add Review" Margin="5" Click="AddReview_Click"/>
             <Button x:Name="btnEditReview" Content="Edit Review" Margin="5" Click="EditReview_Click" IsEnabled="False"/>
             <Button x:Name="btnDeleteReview" Content="Delete Review" Margin="5" Click="DeleteReview_Click" IsEnabled="False"/>
             <Button x:Name="btnViewReview" Content="View Review" Margin="5" Click="ViewReview_Click" IsEnabled="False"/>

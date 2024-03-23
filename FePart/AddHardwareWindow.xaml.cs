@@ -13,6 +13,7 @@ namespace FePart
         private readonly HttpClient _httpClient;
         private readonly Hardware? _selectedHardware;
         private readonly Review? _selectedReview;
+        private List<Hardware> _hardwareList;
 
         public AddHardwareWindow(Hardware? selectedHardware, Review? selectedReview, int? getById)
         {
@@ -21,10 +22,7 @@ namespace FePart
             _httpClient.BaseAddress = new Uri("https://localhost:7082/");
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            if (selectedHardware == null && selectedReview == null)
-            {
-                btnReview.IsEnabled = false;
-            }
+            PopulateHardwareOptions();
 
             if (selectedHardware != null)
             {
@@ -55,6 +53,21 @@ namespace FePart
             }
         }
 
+        private void PopulateHardwareOptions()
+        {
+            HttpResponseMessage response = _httpClient.GetAsync("Hardware").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var hardwares = response.Content.ReadFromJsonAsync<List<Hardware>>().Result;
+                _hardwareList = hardwares;
+                hardware.ItemsSource = hardwares.Select(x => x.Name).ToList();
+            }
+            else
+            {
+                MessageBox.Show("Error Code" + response.StatusCode + " : Message - " + response.ReasonPhrase);
+            }
+        }
+
         private void FillReviewInformation()
         {
             if (_selectedReview == null) return;
@@ -63,7 +76,6 @@ namespace FePart
             text.Text = _selectedReview.Text.ToString();
             rating.Text = _selectedReview.Rating.ToString();
             hardware.Text = _selectedReview.Hardware?.Name.ToString();
-            hardwareId.Text = _selectedReview.HardwareId.ToString();
         }
 
         private void FillHardwareInformation()
@@ -75,7 +87,6 @@ namespace FePart
             code.Text = _selectedHardware.Code;
             stock.Text = _selectedHardware.Stock.ToString();
             price.Text = _selectedHardware.Price.ToString();
-            hardwareId.Text = _selectedHardware.Id.ToString();
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
@@ -123,7 +134,7 @@ namespace FePart
                 Title = title.Text,
                 Text = text.Text,
                 Rating = Convert.ToInt32(rating.Text),
-                HardwareId = Convert.ToInt32(_selectedHardware.Id)
+                HardwareId = _hardwareList.FirstOrDefault(x => x.Name == hardware.Text).Id
             };
 
             HttpResponseMessage response = null;
@@ -140,7 +151,7 @@ namespace FePart
 
             if (response.IsSuccessStatusCode)
             {
-                Close();
+                MessageBox.Show("Added review");
             }
             else
             {

@@ -27,7 +27,7 @@
                 <TextBox x:Name="price" HorizontalAlignment="Left" Height="25" Margin="236,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
             </Grid>
         </TabItem>
-        <TabItem Header="Reviews" x:Name="btnReview">
+        <TabItem Header="Reviews">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="17*"/>
@@ -42,8 +42,7 @@
                 <TextBox x:Name="title" HorizontalAlignment="Left" Height="25" Margin="236,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
                 <TextBox x:Name="text" HorizontalAlignment="Left" Height="25" Margin="236,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
                 <TextBox x:Name="rating" HorizontalAlignment="Left" Height="25" Margin="236,130,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102" Grid.Column="1"/>
-                <TextBox x:Name="hardware" IsReadOnly="True" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
-                <TextBox x:Name="hardwareId" Visibility="Hidden" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102" Grid.Column="1"/>
+                <ComboBox x:Name="hardware" HorizontalAlignment="Left" Height="25" Margin="236,180,0,0" Width="102" Grid.Column="1"/>
             </Grid>
         </TabItem>
     </TabControl>
