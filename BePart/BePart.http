@@ -1,6 +1,25 @@
 @BePart_HostAddress = http://localhost:5074
 
-GET {{BePart_HostAddress}}/weatherforecast/
+GET {{BePart_HostAddress}}/Cat
 Accept: application/json
+
+###
+
+
+POST {{BePart_HostAddress}}/Cat
+Content-Type: application/json
+
+{"age": 10,"color": "Green","name": "Micko","summary": "Lood ko pushka"}
+###
+
+
+PUT {{BePart_HostAddress}}/Cat/11
+Content-Type: application/json
+
+{"id": 11,"age": 10,"color": "Green","name": "Cicko","summary": "Lood ko pushka"}
+###
+
+
+DELETE {{BePart_HostAddress}}/Cat/11
 
 ###
