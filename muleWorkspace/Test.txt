@@ -1,1 +1,0 @@
-"Create: {\n  id: 10,\n  age: 10,\n  color: \"Green\",\n  name: \"Micko\",\n  summary: \"Lood ko pushka\"\n} as Object {encoding: \"UTF-8\", mediaType: \"application/json; charset=UTF-8\", mimeType: \"application/json\"}"

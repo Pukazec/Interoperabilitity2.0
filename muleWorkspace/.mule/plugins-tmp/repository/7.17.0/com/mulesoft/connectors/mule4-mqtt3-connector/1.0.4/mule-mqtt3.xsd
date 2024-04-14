@@ -1,0 +1,1053 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xs:schema xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.mulesoft.org/schema/mule/mqtt3" attributeFormDefault="unqualified" elementFormDefault="qualified">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/core" schemaLocation="http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></xs:import>
+  <xs:import namespace="http://www.mulesoft.org/schema/mule/tls" schemaLocation="http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd"></xs:import>
+  <xs:complexType name="com.mulesoft.connectors.mqtt3.api.clientId.ClientIDGenerator">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType"></xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDGenerator" substitutionGroup="mule:abstract-shared-extension" abstract="true" name="global-abstract-client-id-generator"></xs:element>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDGenerator" abstract="true" name="abstract-client-id-generator"></xs:element>
+  <xs:complexType name="com.mulesoft.connectors.mqtt3.api.clientId.ClientIDRandomSuffixGenerator">
+    <xs:complexContent>
+      <xs:extension xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" base="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDGenerator">
+        <xs:attribute type="xs:string" use="optional" name="clientId"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDRandomSuffixGenerator" substitutionGroup="mqtt3:abstract-client-id-generator" abstract="true" name="abstract-client-id-random-suffix-generator"></xs:element>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" substitutionGroup="mqtt3:abstract-client-id-random-suffix-generator" name="client-id-random-suffix-generator">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDRandomSuffixGenerator"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.mqtt3.api.clientId.ClientIDCustomExpressionGenerator">
+    <xs:complexContent>
+      <xs:extension xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" base="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDGenerator">
+        <xs:attribute type="xs:string" use="optional" name="clientId"></xs:attribute>
+        <xs:attribute xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="mule:expressionString" use="optional" name="customClientIdSuffix"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDCustomExpressionGenerator" substitutionGroup="mqtt3:abstract-client-id-generator" abstract="true" name="abstract-client-id-custom-expression-generator"></xs:element>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" substitutionGroup="mqtt3:abstract-client-id-custom-expression-generator" name="client-id-custom-expression-generator">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mqtt3:com.mulesoft.connectors.mqtt3.api.clientId.ClientIDCustomExpressionGenerator"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstract-shared-extension" name="config">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractExtensionType">
+          <xs:annotation>
+            <xs:documentation>Default configuration</xs:documentation>
+          </xs:annotation>
+          <xs:sequence minOccurs="1" maxOccurs="1">
+            <xs:element minOccurs="1" maxOccurs="1" ref="mule:abstractConnectionProvider"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:expiration-policy"></xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="required" name="name">
+            <xs:annotation>
+              <xs:documentation>The identifier of this element used to reference it in other components</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="url">
+            <xs:annotation>
+              <xs:documentation>The url that represents the broker to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="fail-over-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="fail-over-servers">
+              <xs:annotation>
+                <xs:documentation>The list of server URLs that will be used to (attempt to) establish a connection to the broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="0" maxOccurs="unbounded" ref="mqtt3:abstract-fail-over-url"></xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="failOverServers">
+            <xs:annotation>
+              <xs:documentation>The list of server URLs that will be used to (attempt to) establish a connection to the broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="com.mulesoft.connectors.mqtt3.api.FailOverURL">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.ProtocolEnumType" use="optional" default="TCP" name="protocol"></xs:attribute>
+        <xs:attribute type="xs:string" use="optional" default="localhost" name="host"></xs:attribute>
+        <xs:attribute type="xs:string" use="optional" default="1883" name="port"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.FailOverURL" abstract="true" name="abstract-fail-over-url"></xs:element>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" substitutionGroup="mqtt3:abstract-fail-over-url" name="fail-over-url">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mqtt3:com.mulesoft.connectors.mqtt3.api.FailOverURL"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="form-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.ProtocolEnumType" use="optional" default="TCP" name="protocol">
+            <xs:annotation>
+              <xs:documentation>The protocol to be used when connecting to the broker. Defaults to TCP</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="host">
+            <xs:annotation>
+              <xs:documentation>The host of the broker to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="optional" default="1883" name="port">
+            <xs:annotation>
+              <xs:documentation>The broker's port to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/mqtt3" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="ListenerType" substitutionGroup="mule:abstract-message-source" name="listener"></xs:element>
+  <xs:complexType name="ListenerType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractMessageSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-redelivery-policy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element minOccurs="0" maxOccurs="1" name="topics">
+            <xs:annotation>
+              <xs:documentation>The list of Topics that this listener will subscribe to.</xs:documentation>
+            </xs:annotation>
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="0" maxOccurs="unbounded" ref="mqtt3:abstract-topic"></xs:element>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:substitutableName" use="optional" name="topics">
+          <xs:annotation>
+            <xs:documentation>The list of Topics that this listener will subscribe to.</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:substitutableBoolean" use="optional" name="primaryNodeOnly">
+          <xs:annotation>
+            <xs:documentation>Whether this source should only be executed on the primary node when runnning in Cluster</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="com.mulesoft.connectors.mqtt3.api.Topic">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractExtensionType">
+        <xs:attribute type="mule:expressionString" use="required" name="topicFilter"></xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" type="mqtt3:com.mulesoft.connectors.mqtt3.api.Topic" abstract="true" name="abstract-topic"></xs:element>
+  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" substitutionGroup="mqtt3:abstract-topic" name="topic">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mqtt3:com.mulesoft.connectors.mqtt3.api.Topic"></xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns="http://www.mulesoft.org/schema/mule/mqtt3" xmlns:mule="http://www.mulesoft.org/schema/mule/core" type="PublishType" substitutionGroup="mule:abstract-operator" name="publish">
+    <xs:annotation>
+      <xs:documentation>Operation that allows the user to publish a single MQTT3Message to a given exchange</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:complexType name="PublishType">
+    <xs:complexContent>
+      <xs:extension xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:abstractOperatorType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+          <xs:element minOccurs="0" maxOccurs="1" ref="mule:abstract-reconnection-strategy"></xs:element>
+          <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="message">
+            <xs:annotation>
+              <xs:documentation>the content of the message to be published</xs:documentation>
+            </xs:annotation>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute type="mule:expressionString" use="required" name="topic">
+          <xs:annotation>
+            <xs:documentation>the topic to which the message must be published</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+          <xs:annotation>
+            <xs:documentation>the QoS with which the message will be published</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+          <xs:annotation>
+            <xs:documentation>whether the message should be retained by the broker</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute type="xs:string" use="required" name="config-ref">
+          <xs:annotation>
+            <xs:documentation>The name of the configuration to be used to execute this component</xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="url">
+            <xs:annotation>
+              <xs:documentation>The url that represents the broker to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="fail-over-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="fail-over-servers">
+              <xs:annotation>
+                <xs:documentation>The list of server URLs that will be used to (attempt to) establish a connection to the broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="0" maxOccurs="unbounded" ref="mqtt3:abstract-fail-over-url"></xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:substitutableName" use="optional" name="failOverServers">
+            <xs:annotation>
+              <xs:documentation>The list of server URLs that will be used to (attempt to) establish a connection to the broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element xmlns:mule="http://www.mulesoft.org/schema/mule/core" substitutionGroup="mule:abstractConnectionProvider" name="form-connection">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="mule:abstractConnectionProviderType">
+          <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:element minOccurs="0" maxOccurs="1" ref="mule:reconnection"></xs:element>
+            <xs:element xmlns:tls="http://www.mulesoft.org/schema/mule/tls" minOccurs="0" maxOccurs="1" ref="tls:context"></xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="client-id-generator">
+              <xs:annotation>
+                <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+              </xs:annotation>
+              <xs:complexType>
+                <xs:choice minOccurs="1" maxOccurs="1">
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:abstract-client-id-generator"></xs:element>
+                  <xs:element xmlns:mqtt3="http://www.mulesoft.org/schema/mule/mqtt3" minOccurs="1" maxOccurs="1" ref="mqtt3:global-abstract-client-id-generator"></xs:element>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="last-will-and-testament">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence>
+                      <xs:element type="xs:string" minOccurs="0" maxOccurs="1" name="body">
+                        <xs:annotation>
+                          <xs:documentation>The content of the last will and testament message.</xs:documentation>
+                        </xs:annotation>
+                      </xs:element>
+                    </xs:sequence>
+                    <xs:attribute type="xs:string" use="optional" name="topic">
+                      <xs:annotation>
+                        <xs:documentation>The topic to which the last will and testament message will be published.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.QoSEnumType" use="optional" default="AT_LEAST_ONCE" name="qos">
+                      <xs:annotation>
+                        <xs:documentation>The quality of service QoS with which the last will and testament message will be published. Defaults to AT_LEAST_ONCE</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="isRetained">
+                      <xs:annotation>
+                        <xs:documentation>If set to true the last will and testament message will be retained by the broker.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="connection-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="30" name="connectionTimeout">
+                      <xs:annotation>
+                        <xs:documentation>The socket connection timeout value. This attribute works in tandem with #timeoutUnit. In the case of multiple fail-over URLs provided, the timeout applies to each one individually.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="timeoutUnit">
+                      <xs:annotation>
+                        <xs:documentation>A TimeUnit which qualifies the #connectionTimeout attribute. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="0" name="keepAliveInterval">
+                      <xs:annotation>
+                        <xs:documentation>The amount of time that the connection between client and broker will be kept alive without any messages being exchanged. If the keep-alive interval is 0, then the keep-alive mechanism is disabled.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="java.util.concurrent.TimeUnitEnumType" use="optional" default="SECONDS" name="keepAliveIntervalUnit">
+                      <xs:annotation>
+                        <xs:documentation>The unit of time that corresponds to the keepAliveInterval parameter. Defaults to SECONDS</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionInt" use="optional" default="10" name="maxInFlight">
+                      <xs:annotation>
+                        <xs:documentation>The maximum amount of messages that can be unacknowledged at a given time. Setting it to 0 means, there can be unlimited in-flight messages.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="true" name="cleanSession">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, the session will be cleaned each time the client disconnects from the broker. Subscriptions will not be saved and offline (qos 1 and 2) messages for that client will be lost.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" maxOccurs="1" name="file-persistence-options">
+              <xs:complexType>
+                <xs:complexContent>
+                  <xs:extension base="mule:abstractExtensionType">
+                    <xs:sequence></xs:sequence>
+                    <xs:attribute type="mule:expressionBoolean" use="optional" default="false" name="enableFilePersistence">
+                      <xs:annotation>
+                        <xs:documentation>If set to true, creates an file-based persistent data store, used to store outbound and inbound messages while they are in flight, enabling delivery to the QoS specified.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                    <xs:attribute type="mule:expressionString" use="optional" name="dataStorePath">
+                      <xs:annotation>
+                        <xs:documentation>The directory where the file-based persistent data store will be created if enableFilePersistence is set to true.</xs:documentation>
+                      </xs:annotation>
+                    </xs:attribute>
+                  </xs:extension>
+                </xs:complexContent>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+          <xs:attribute type="xs:string" use="optional" name="tlsContext"></xs:attribute>
+          <xs:attribute type="xs:string" use="optional" name="clientIDGenerator">
+            <xs:annotation>
+              <xs:documentation>A ClientIDGenerator that generates a Client ID to identify a connection to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="username">
+            <xs:annotation>
+              <xs:documentation>Username to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="mule:expressionString" use="optional" name="password">
+            <xs:annotation>
+              <xs:documentation>Password to be used when providing authentication credentials to the MQTT broker.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute xmlns="http://www.mulesoft.org/schema/mule/mqtt3" type="com.mulesoft.connectors.mqtt3.api.ProtocolEnumType" use="optional" default="TCP" name="protocol">
+            <xs:annotation>
+              <xs:documentation>The protocol to be used when connecting to the broker. Defaults to TCP</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="required" name="host">
+            <xs:annotation>
+              <xs:documentation>The host of the broker to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute type="xs:string" use="optional" default="1883" name="port">
+            <xs:annotation>
+              <xs:documentation>The broker's port to connect to.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="com.mulesoft.connectors.mqtt3.api.QoSEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AT_MOST_ONCE"></xs:enumeration>
+          <xs:enumeration value="AT_LEAST_ONCE"></xs:enumeration>
+          <xs:enumeration value="EXACTLY_ONCE"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="java.util.concurrent.TimeUnitEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="NANOSECONDS"></xs:enumeration>
+          <xs:enumeration value="MICROSECONDS"></xs:enumeration>
+          <xs:enumeration value="MILLISECONDS"></xs:enumeration>
+          <xs:enumeration value="SECONDS"></xs:enumeration>
+          <xs:enumeration value="MINUTES"></xs:enumeration>
+          <xs:enumeration value="HOURS"></xs:enumeration>
+          <xs:enumeration value="DAYS"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="com.mulesoft.connectors.mqtt3.api.ProtocolEnumType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="TCP"></xs:enumeration>
+          <xs:enumeration value="WS"></xs:enumeration>
+          <xs:enumeration value="WSS"></xs:enumeration>
+          <xs:enumeration value="SSL"></xs:enumeration>
+          <xs:enumeration value="LOCAL"></xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction xmlns:mule="http://www.mulesoft.org/schema/mule/core" base="mule:propertyPlaceholderType"></xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+</xs:schema>

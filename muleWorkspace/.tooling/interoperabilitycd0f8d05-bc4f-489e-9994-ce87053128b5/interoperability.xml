@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+	http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+	http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+	http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="cf9b5530-b680-4ce2-bb5c-491129cceda6" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="1f0be4cd-fac8-4944-85f9-1455b885f92b" >
+		<http:request-connection host="localhost" port="5074" />
+	</http:request-config>
+	<sockets:listener-config name="Sockets_Listener_config" doc:name="Sockets Listener config" doc:id="cecbe506-99fa-4be9-bf12-e7b0eec9cbcb" >
+		<sockets:tcp-listener-connection host="localhost" port="8080" />
+	</sockets:listener-config>
+	<flow name="interoperabilityFlow" doc:id="39fcc032-b8be-4a84-a852-ef1d7c3f44b8" >
+		<http:listener doc:name="Listener" doc:id="c2e24c9d-e14d-4613-9635-c8d9afe92f5e" config-ref="HTTP_Listener_config" path="/"/>
+		<http:request method="GET" doc:name="Request" doc:id="c20eccdf-c530-44fb-84b6-5e9cb72014f3" path="/Cat" config-ref="HTTP_Request_configuration"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3774b02c-3dbc-4d71-80ef-28fbef77f2b9" message="Primil sam ga"/>
+		<file:write doc:name="Write" doc:id="c6d6243b-4bb4-40b2-8b1e-a3cc7feff2a0" path="D:\Data\University\Interoperability\FePart\muleWorkspace\Test.txt" mode="APPEND">
+			<file:content ><![CDATA[#["Get all: " ++ write(payload)]]]></file:content>
+		</file:write>
+	</flow>
+	
+	<flow name="interoperabilityFlowCreate" doc:id="39fcc032-b8be-4a84-a852-ef1d7c3f44b8" >
+		<http:listener doc:name="Listener" doc:id="c2e24c9d-e14d-4613-9635-c8d9afe92f5e" config-ref="HTTP_Listener_config" path="/Create"/>
+		<set-payload value='{"age": 10,"color": "Green","name": "Micko","summary": "Lood ko pushka"}' doc:name="Set Payload" doc:id="3129b140-0fe9-46f1-b767-d341439577b0" />
+		<http:request method="POST" doc:name="Request" doc:id="c20eccdf-c530-44fb-84b6-5e9cb72014f3" path="/Cat" config-ref="HTTP_Request_configuration">
+			<http:headers ><![CDATA[#[{
+  "Content-Type": "application/json"
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="3774b02c-3dbc-4d71-80ef-28fbef77f2b9" message="Poslal sam ga"/>
+		<file:write doc:name="Write" doc:id="c6d6243b-4bb4-40b2-8b1e-a3cc7feff2a0" path="D:\Data\University\Interoperability\FePart\muleWorkspace\Test.txt" mode="APPEND">
+			<file:content ><![CDATA[#["Create: " ++ write(payload)]]]></file:content>
+		</file:write>
+	</flow>
+	
+	<flow name="interoperabilityFlowUpdate" doc:id="39fcc032-b8be-4a84-a852-ef1d7c3f44b8" >
+		<http:listener doc:name="Listener" doc:id="c2e24c9d-e14d-4613-9635-c8d9afe92f5e" config-ref="HTTP_Listener_config" path="/Update"/>
+		<set-payload value='{"id": 11,"age": 10,"color": "Green","name": "Cicko","summary": "Lood ko pushka"}' doc:name="Set Payload" doc:id="b65dfb84-5bcf-4fbd-bb42-398f8ee026b8" />
+		<http:request method="PUT" doc:name="Request" doc:id="c20eccdf-c530-44fb-84b6-5e9cb72014f3" path="/Cat/11" config-ref="HTTP_Request_configuration">
+		<http:headers ><![CDATA[#[{
+  "Content-Type": "application/json"
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="3774b02c-3dbc-4d71-80ef-28fbef77f2b9" message="Metnul sam ga"/>
+		<file:write doc:name="Write" doc:id="c6d6243b-4bb4-40b2-8b1e-a3cc7feff2a0" path="D:\Data\University\Interoperability\FePart\muleWorkspace\Test.txt" mode="APPEND">
+			<file:content ><![CDATA[#["Put: " ++ write(payload)]]]></file:content>
+		</file:write>
+	
+</flow>
+	
+	<flow name="interoperabilityFlowDelete" doc:id="39fcc032-b8be-4a84-a852-ef1d7c3f44b8" >
+		<http:listener doc:name="Listener" doc:id="c2e24c9d-e14d-4613-9635-c8d9afe92f5e" config-ref="HTTP_Listener_config" path="/Delete"/>
+		<http:request method="DELETE" doc:name="Request" doc:id="c20eccdf-c530-44fb-84b6-5e9cb72014f3" path="/Cat/11" config-ref="HTTP_Request_configuration"/>
+		<logger level="INFO" doc:name="Logger" doc:id="3774b02c-3dbc-4d71-80ef-28fbef77f2b9" message="Zvadil sem ga"/>
+		<file:write doc:name="Write" doc:id="c6d6243b-4bb4-40b2-8b1e-a3cc7feff2a0" path="D:\Data\University\Interoperability\FePart\muleWorkspace\Test.txt" mode="APPEND">
+			<file:content ><![CDATA[#["Delete: " ++ write(payload)]]]></file:content>
+		</file:write>
+	</flow>
+	<flow name="interoperabilityFlow1" doc:id="bd37037b-07ba-40cb-a706-4cba55b7e029" >
+		<sockets:listener doc:name="Listener" doc:id="7ffb9e23-4c21-4e4a-95fe-9defc39aa3de" />
+	</flow>
+
+	 
+
+</mule>

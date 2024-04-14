@@ -1,6 +1,8 @@
+using BePart.ActiveMQ;
 using BePart.Data;
 using Dtos;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BePart.Controllers
 {
@@ -19,6 +21,8 @@ namespace BePart.Controllers
         public IActionResult GetAllCats()
         {
             var cats = _catService.GetAllCats();
+            var producer = new ActiveMQProducer("get all cats");
+            producer.SendMessage(JsonSerializer.Serialize(cats).ToString());
             return Ok(cats);
         }
 
@@ -30,6 +34,8 @@ namespace BePart.Controllers
             {
                 return NotFound();
             }
+            var producer = new ActiveMQProducer("get one cat");
+            producer.SendMessage(JsonSerializer.Serialize(cat).ToString());
             return Ok(cat);
         }
 
