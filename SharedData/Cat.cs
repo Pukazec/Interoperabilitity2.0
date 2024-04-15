@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Dtos
 {
+    [Table(nameof(Cat))]
     public class Cat
     {
         public int Id { get; set; }
@@ -8,7 +11,7 @@ namespace Dtos
 
         public string Color { get; set; } = string.Empty;
 
-        public string Name { get; set; } = string.Empty;
+        public string CatName { get; set; } = string.Empty;
 
         public string? Summary { get; set; }
     }

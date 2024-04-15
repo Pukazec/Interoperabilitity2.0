@@ -5,6 +5,10 @@ Accept: application/json
 
 ###
 
+GET {{BePart_HostAddress}}/Cat/1
+Accept: application/json
+
+###
 
 POST {{BePart_HostAddress}}/Cat
 Content-Type: application/json

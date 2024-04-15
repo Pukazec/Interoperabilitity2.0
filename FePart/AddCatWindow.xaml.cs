@@ -50,7 +50,7 @@ namespace FePart
         {
             if (_selectedCat == null) return;
 
-            catName.Text = _selectedCat.Name;
+            catName.Text = _selectedCat.CatName;
             catAge.Text = _selectedCat.Age.ToString();
             catColor.Text = _selectedCat.Color;
             catSummary.Text = _selectedCat.Summary ?? "";
@@ -67,7 +67,7 @@ namespace FePart
             {
                 Age = Convert.ToDouble(catAge.Text),
                 Color = catColor.Text,
-                Name = catName.Text,
+                CatName = catName.Text,
                 Summary = catSummary.Text
             };
 
