@@ -67,13 +67,13 @@ http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/
 		</file:write>
 	</flow>
 	<flow name="interoperabilityFlow2" doc:id="2c004a09-c5eb-4b2c-9bc7-3260b8cc435a" >
-		<jms:listener doc:name="On New Message" doc:id="cad96b36-c7e3-45ee-bf5b-5fa90659ba5c" config-ref="JMS_Config" destination="get all cats" ackMode="AUTO">
+		<jms:listener doc:name="On New Message" doc:id="cad96b36-c7e3-45ee-bf5b-5fa90659ba5c" config-ref="JMS_Config" destination="cats gotten" ackMode="AUTO">
 			<jms:consumer-type >
 				<jms:queue-consumer />
 			</jms:consumer-type>
 		</jms:listener>
 		<logger level="INFO" doc:name="Logger" doc:id="3d8aa1e7-798a-4516-9c3b-4efce6c18220" message="Active mq mesage"/>
-		<file:write doc:name="Write" doc:id="2e49751f-3d45-4a0d-a124-6444d2c17fc4" path="D:\Data\University\Interoperability\FePart\muleWorkspace\ActiveMq.txt"/>
+		<file:write doc:name="Write" doc:id="2e49751f-3d45-4a0d-a124-6444d2c17fc4" path="D:\Data\University\Interoperability\FePart\muleWorkspace\ActiveMq.txt" mode="APPEND"/>
 	</flow>
 
 	 

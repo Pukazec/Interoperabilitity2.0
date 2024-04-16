@@ -2,31 +2,38 @@ using BePart.ActiveMQ;
 using BePart.Data;
 using Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
 namespace BePart.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
-    public class CatController : ControllerBase
+    [ApiController]
+    public abstract class ApiControllerBase : ControllerBase
+    {
+    }
+
+    public class CatController : ApiControllerBase
     {
         private readonly ICatService _catService;
+        private readonly CatDbContext _context;
 
-        public CatController(ICatService catService)
+        public CatController(ICatService catService, CatDbContext context)
         {
             _catService = catService;
+            _context = context;
         }
 
         [HttpGet]
         public IActionResult GetAllCats()
         {
             var cats = _catService.GetAllCats();
-            var producer = new ActiveMQProducer("get all cats");
+            var producer = new ActiveMQProducer("cats gotten");
             producer.SendMessage(JsonSerializer.Serialize(cats).ToString());
             return Ok(cats);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/id")]
         public IActionResult GetCatById(int id)
         {
             var cat = _catService.GetCatById(id);
@@ -36,6 +43,20 @@ namespace BePart.Controllers
             }
             var producer = new ActiveMQProducer("get one cat");
             producer.SendMessage(JsonSerializer.Serialize(cat).ToString());
+            return Ok(cat);
+        }
+
+        [HttpGet("{name}")]
+        public IActionResult GetCatByName(string name)
+        {
+            string query = "SELECT * FROM CAT WHERE CATNAME = '" + name + "'";
+            var cat = _context.Database.ExecuteSqlRaw(query);
+
+            //var cat = _catService.GetCatByName(name);
+            //if (cat == null)
+            //{
+            //    return NotFound();
+            //}
             return Ok(cat);
         }
 

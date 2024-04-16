@@ -6,6 +6,7 @@ namespace BePart.Data
     {
         List<Cat> GetAllCats();
         Cat GetCatById(int id);
+        Cat GetCatByName(string name);
         void AddCat(Cat cat);
         void UpdateCat(Cat cat);
         void DeleteCat(int id);
@@ -22,10 +23,9 @@ namespace BePart.Data
 
         public List<Cat> GetAllCats() => _context.Cats.ToList();
 
-        public Cat GetCatById(int id)
-        {
-            return _context.Cats.Single(c => c.Id == id);
-        }
+        public Cat GetCatById(int id) => _context.Cats.Single(c => c.Id == id);
+
+        public Cat GetCatByName(string name) => _context.Cats.Single(c => c.CatName == name);
 
         public void AddCat(Cat cat)
         {
