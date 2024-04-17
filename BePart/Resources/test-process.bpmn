@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Web Modeler" exporterVersion="8c03b57" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.5.0" camunda:diagramRelationId="dd3bb858-30cd-4f85-8d20-0b75762fbdf6">
+  <bpmn:process id="test-process" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="UserTaskForm_2ilb33n">{
+  "components": [
+    {
+      "text": "# Do you have money to throw away?",
+      "type": "text",
+      "id": "Field_1j1elge"
+    },
+    {
+      "values": [
+        {
+          "label": "Yes",
+          "value": "yes"
+        },
+        {
+          "label": "No",
+          "value": "no"
+        }
+      ],
+      "label": "Throw away money:",
+      "type": "radio",
+      "id": "Field_0e0gi28",
+      "key": "money",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "schemaVersion": 4,
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "5b7b5bc"
+  },
+  "type": "default",
+  "id": "Form_8936f568-04c6-448e-b8a6-80be8d3176df",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "1.3"
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="UserTaskForm_2se1e24">{
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.5.0",
+  "exporter": {
+    "name": "Camunda Web Modeler",
+    "version": "8c03b57"
+  },
+  "schemaVersion": 16,
+  "id": "Form_0wpye35",
+  "components": [
+    {
+      "label": "Age",
+      "type": "number",
+      "layout": {
+        "row": "Row_11ttd9t",
+        "columns": null
+      },
+      "id": "Field_095qk3d",
+      "key": "age"
+    },
+    {
+      "values": [
+        {
+          "label": "Black",
+          "value": "Black"
+        },
+        {
+          "label": "Orange",
+          "value": "Orange"
+        },
+        {
+          "label": "Gray",
+          "value": "Gray"
+        }
+      ],
+      "label": "Color",
+      "type": "radio",
+      "layout": {
+        "row": "Row_0gniazy",
+        "columns": null
+      },
+      "id": "Field_0gy8uw2",
+      "key": "color"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0atoqrg",
+        "columns": null
+      },
+      "id": "Field_1erzx2n",
+      "key": "catName"
+    },
+    {
+      "label": "Summary",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_1s1z7rz",
+        "columns": null
+      },
+      "id": "Field_0ppf5j7",
+      "key": "summary"
+    }
+  ],
+  "type": "default"
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="Event_0w6mthq" name="Do I need more cats">
+      <bpmn:outgoing>Flow_1bhiboi</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1bhiboi" sourceRef="Event_0w6mthq" targetRef="Activity_0u17y4m" />
+    <bpmn:exclusiveGateway id="Gateway_13k2zbx" name="Cats?">
+      <bpmn:incoming>Flow_0ceks1s</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sku3up</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0aia92m</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0ceks1s" sourceRef="Activity_0u17y4m" targetRef="Gateway_13k2zbx" />
+    <bpmn:task id="Activity_0j99r0n" name="Don&#39;t need more cats.">
+      <bpmn:incoming>Flow_1sku3up</bpmn:incoming>
+      <bpmn:outgoing>Flow_1e7sw0d</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1sku3up" name="More than 10" sourceRef="Gateway_13k2zbx" targetRef="Activity_0j99r0n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cats &gt; 10</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0aia92m" name="Less than 10" sourceRef="Gateway_13k2zbx" targetRef="Activity_0n9js5b">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=cats &lt;= 10</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0i32ya2" name="Happy have lots of cats pet them">
+      <bpmn:incoming>Flow_1e7sw0d</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1e7sw0d" sourceRef="Activity_0j99r0n" targetRef="Event_0i32ya2" />
+    <bpmn:exclusiveGateway id="Gateway_1ta35ll" name="Have trow&#10;away money">
+      <bpmn:incoming>Flow_0xquj8t</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tv677r</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1atvtkk</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0xquj8t" sourceRef="Activity_0n9js5b" targetRef="Gateway_1ta35ll" />
+    <bpmn:userTask id="Activity_0n9js5b" name="Need more cats.&#10;Chose a place to get them from.">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_2ilb33n" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0aia92m</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xquj8t</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="Activity_0xd0w6n" name="Get Cat from shelter.">
+      <bpmn:incoming>Flow_0tv677r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1nerwh0</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_0tv677r" name="No" sourceRef="Gateway_1ta35ll" targetRef="Activity_0xd0w6n">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=money="no"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_0u5kpkf" name="Buy cat with pedigree.">
+      <bpmn:incoming>Flow_1atvtkk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1t4c9qa</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:sequenceFlow id="Flow_1atvtkk" name="Yes" sourceRef="Gateway_1ta35ll" targetRef="Activity_0u5kpkf">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=money="yes"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_04aluu0">
+      <bpmn:incoming>Flow_1nerwh0</bpmn:incoming>
+      <bpmn:incoming>Flow_1t4c9qa</bpmn:incoming>
+      <bpmn:outgoing>Flow_12r9dcv</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1nerwh0" sourceRef="Activity_0xd0w6n" targetRef="Gateway_04aluu0" />
+    <bpmn:sequenceFlow id="Flow_1t4c9qa" sourceRef="Activity_0u5kpkf" targetRef="Gateway_04aluu0" />
+    <bpmn:sequenceFlow id="Flow_12r9dcv" sourceRef="Gateway_04aluu0" targetRef="Activity_16mbffj" />
+    <bpmn:sequenceFlow id="Flow_080mp2k" sourceRef="Activity_16mbffj" targetRef="Event_1emnnep" />
+    <bpmn:endEvent id="Event_1emnnep" name="Happy have new cat.">
+      <bpmn:incoming>Flow_080mp2k</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0u17y4m" name="How many cats do I have">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="get-cats" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bhiboi</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ceks1s</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_16mbffj" name="Fill out new cat data.">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:UserTaskForm_2se1e24" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_12r9dcv</bpmn:incoming>
+      <bpmn:outgoing>Flow_080mp2k</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="test-process">
+      <bpmndi:BPMNShape id="Event_0w6mthq_di" bpmnElement="Event_0w6mthq">
+        <dc:Bounds x="182" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="164" y="315" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_13k2zbx_di" bpmnElement="Gateway_13k2zbx" isMarkerVisible="true">
+        <dc:Bounds x="425" y="265" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="405" y="263" width="29" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0j99r0n_di" bpmnElement="Activity_0j99r0n">
+        <dc:Bounds x="400" y="100" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0i32ya2_di" bpmnElement="Event_0i32ya2">
+        <dc:Bounds x="552" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530" y="165.5" width="80" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ta35ll_di" bpmnElement="Gateway_1ta35ll" isMarkerVisible="true">
+        <dc:Bounds x="565" y="415" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="508" y="396" width="64" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1g09niz_di" bpmnElement="Activity_0n9js5b">
+        <dc:Bounds x="400" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0xd0w6n_di" bpmnElement="Activity_0xd0w6n">
+        <dc:Bounds x="650" y="330" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0u5kpkf_di" bpmnElement="Activity_0u5kpkf">
+        <dc:Bounds x="650" y="480" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_04aluu0_di" bpmnElement="Gateway_04aluu0" isMarkerVisible="true">
+        <dc:Bounds x="785" y="425" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1emnnep_di" bpmnElement="Event_1emnnep">
+        <dc:Bounds x="1042" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1020" y="475" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_11l29p9_di" bpmnElement="Activity_0u17y4m">
+        <dc:Bounds x="270" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1g7e1gc_di" bpmnElement="Activity_16mbffj">
+        <dc:Bounds x="890" y="410" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1bhiboi_di" bpmnElement="Flow_1bhiboi">
+        <di:waypoint x="218" y="290" />
+        <di:waypoint x="270" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ceks1s_di" bpmnElement="Flow_0ceks1s">
+        <di:waypoint x="370" y="290" />
+        <di:waypoint x="425" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sku3up_di" bpmnElement="Flow_1sku3up">
+        <di:waypoint x="450" y="265" />
+        <di:waypoint x="450" y="180" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="378" y="203" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0aia92m_di" bpmnElement="Flow_0aia92m">
+        <di:waypoint x="450" y="315" />
+        <di:waypoint x="450" y="400" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="378" y="363" width="64" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1e7sw0d_di" bpmnElement="Flow_1e7sw0d">
+        <di:waypoint x="500" y="140" />
+        <di:waypoint x="552" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xquj8t_di" bpmnElement="Flow_0xquj8t">
+        <di:waypoint x="500" y="440" />
+        <di:waypoint x="565" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tv677r_di" bpmnElement="Flow_0tv677r">
+        <di:waypoint x="590" y="415" />
+        <di:waypoint x="590" y="370" />
+        <di:waypoint x="650" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="598" y="373" width="14" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1atvtkk_di" bpmnElement="Flow_1atvtkk">
+        <di:waypoint x="590" y="465" />
+        <di:waypoint x="590" y="520" />
+        <di:waypoint x="650" y="520" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="503" width="20" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nerwh0_di" bpmnElement="Flow_1nerwh0">
+        <di:waypoint x="750" y="370" />
+        <di:waypoint x="810" y="370" />
+        <di:waypoint x="810" y="425" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1t4c9qa_di" bpmnElement="Flow_1t4c9qa">
+        <di:waypoint x="750" y="520" />
+        <di:waypoint x="810" y="520" />
+        <di:waypoint x="810" y="475" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12r9dcv_di" bpmnElement="Flow_12r9dcv">
+        <di:waypoint x="835" y="450" />
+        <di:waypoint x="890" y="450" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_080mp2k_di" bpmnElement="Flow_080mp2k">
+        <di:waypoint x="990" y="450" />
+        <di:waypoint x="1042" y="450" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
