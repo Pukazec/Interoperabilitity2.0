@@ -3,26 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BePart.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
-    public class ZeebeController : ControllerBase
+    public class ZeebeController(IZeebeService zeebeService) : ControllerBase
     {
-        private readonly IZeebeService _zeebeService;
+        private readonly IZeebeService _zeebeService = zeebeService;
 
-        public ZeebeController(IZeebeService zeebeService)
-        {
-            _zeebeService = zeebeService;
-        }
-
-        [Route("/status")]
-        [HttpGet]
+        [HttpGet("/status")]
         public async Task<string> Get()
         {
-            return (await _zeebeService.Status()).ToString();
+            return (await _zeebeService.Status()).ToString() ?? "";
         }
 
-        [Route("/start")]
-        [HttpGet]
+        [HttpGet("/start")]
         public async Task<string> StartWorkflowInstance()
         {
             var instance = await _zeebeService.StartWorkflowInstance("test-process");

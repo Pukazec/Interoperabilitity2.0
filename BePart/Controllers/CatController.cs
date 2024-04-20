@@ -13,16 +13,10 @@ namespace BePart.Controllers
     {
     }
 
-    public class CatController : ApiControllerBase
+    public class CatController(ICatService catService, CatDbContext context) : ApiControllerBase
     {
-        private readonly ICatService _catService;
-        private readonly CatDbContext _context;
-
-        public CatController(ICatService catService, CatDbContext context)
-        {
-            _catService = catService;
-            _context = context;
-        }
+        private readonly ICatService _catService = catService;
+        private readonly CatDbContext _context = context;
 
         [HttpGet]
         public IActionResult GetAllCats()
@@ -52,11 +46,6 @@ namespace BePart.Controllers
             string query = "SELECT * FROM CAT WHERE CATNAME = '" + name + "'";
             var cat = _context.Database.ExecuteSqlRaw(query);
 
-            //var cat = _catService.GetCatByName(name);
-            //if (cat == null)
-            //{
-            //    return NotFound();
-            //}
             return Ok(cat);
         }
 

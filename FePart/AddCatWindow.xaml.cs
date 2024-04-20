@@ -13,14 +13,17 @@ namespace FePart
     /// </summary>
     public partial class AddCatWindow : Window
     {
+        private const string UriString = "https://localhost:7082/";
         private readonly HttpClient _httpClient;
         private readonly Cat? _selectedCat;
 
         public AddCatWindow(Cat? selectedCat, int? getById)
         {
             InitializeComponent();
-            _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://localhost:7082/");
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(UriString)
+            };
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             if (selectedCat != null)
             {
@@ -71,8 +74,7 @@ namespace FePart
                 Summary = catSummary.Text
             };
 
-            HttpResponseMessage response = null;
-
+            HttpResponseMessage? response;
             if (_selectedCat != null)
             {
                 dto.Id = _selectedCat.Id;

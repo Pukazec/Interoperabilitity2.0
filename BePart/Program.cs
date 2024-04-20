@@ -36,7 +36,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 var zeebeService = app.Services.GetService<IZeebeService>();
-zeebeService.Deploy("test-process.bpmn");
-zeebeService.StartWorkers();
+if (zeebeService != null)
+{
+    await zeebeService.Deploy("test-process.bpmn");
+    zeebeService.StartWorkers();
+}
 
 app.Run();

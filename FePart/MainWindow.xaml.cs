@@ -48,12 +48,12 @@ namespace FePart
 
         private void ViewCat_Click(object sender, RoutedEventArgs e)
         {
-            new AddCatWindow(null, SelectedCat.Id).Show();
+            new AddCatWindow(null, SelectedCat?.Id).Show();
         }
 
         private void DeleteCat_Click(object sender, RoutedEventArgs e)
         {
-            _httpClient.DeleteAsync($"Cat/{SelectedCat.Id}");
+            _httpClient.DeleteAsync($"Cat/{SelectedCat?.Id}");
         }
 
         private void RowSelected(object sender, RoutedEventArgs e)

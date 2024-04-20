@@ -1,5 +1,19 @@
 @BePart_HostAddress = http://localhost:5074
 
+### BPM calls
+
+GET {{BePart_HostAddress}}/Zeebe/Status
+Accept: application/json
+
+###
+
+GET {{BePart_HostAddress}}/Zeebe/Start
+Accept: application/json
+
+###
+### Cat calls
+###
+
 GET {{BePart_HostAddress}}/Cat
 Accept: application/json
 

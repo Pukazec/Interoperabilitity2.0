@@ -1,5 +1,4 @@
 ﻿using BePart.Data;
-using DotEnv.Core;
 using Dtos;
 using System.Text.Json;
 using Zeebe.Client;
@@ -25,17 +24,17 @@ namespace BePart.Data_Service
         private readonly IZeebeClient _client;
         private readonly IServiceProvider _serviceProvider;
 
-        public ZeebeeService(IEnvReader envReader, IServiceProvider serviceProvider)
+        public ZeebeeService(IServiceProvider serviceProvider)
         {
-            var authServer = "https://login.cloud.camunda.io/oauth/token"; //envReader.GetStringValue("ZEEBE_AUTHORIZATION_SERVER_URL");
-            var clientId = "dytHHc0RGG-k.WQiyQwzUhGB_991MP2T"; //envReader.GetStringValue("ZEEBE_CLIENT_ID");
-            var clientSecret = "o-dY5o0jOBO~ui95XLqzGQ5c2-UWtE4vSy03_mOoZ_HRayRdTWLEqyLrQyT5pLIv"; //envReader.GetStringValue("ZEEBE_CLIENT_SECRET");
-            var zeebeUrl = "52ebf02c-001e-4c51-ba95-3836bf091c3b.bru-2.zeebe.camunda.io:443"; //envReader.GetStringValue("ZEEBE_ADDRESS");
+            var authServer = "https://login.cloud.camunda.io/oauth/token";
+            var clientId = "dytHHc0RGG-k.WQiyQwzUhGB_991MP2T";
+            var clientSecret = "o-dY5o0jOBO~ui95XLqzGQ5c2-UWtE4vSy03_mOoZ_HRayRdTWLEqyLrQyT5pLIv";
+            var zeebeUrl = "52ebf02c-001e-4c51-ba95-3836bf091c3b.bru-2.zeebe.camunda.io:443";
             char[] port =
-            {
+            [
                 '4', '3', ':'
-            };
-            var audience = zeebeUrl?.TrimEnd(port);
+            ];
+            var audience = zeebeUrl.TrimEnd(port);
 
             _client = ZeebeClient
                 .Builder()
@@ -56,18 +55,17 @@ namespace BePart.Data_Service
         public void StartWorkers()
         {
             CreateGetCatsWorker();
-            //CreateMakeCatWorker();
         }
 
         public void CreateGetCatsWorker()
         {
-            _createWorker("get-cats", async (client, job) =>
+            CreateWorker("get-cats", async (client, job) =>
             {
                 await Console.Out.WriteLineAsync($"Recieved job: {job}");
 
                 using var scope = _serviceProvider.CreateScope();
                 var catService = scope.ServiceProvider.GetService<ICatService>();
-                var catsCount = catService.GetAllCats().Count;
+                var catsCount = catService?.GetAllCats().Count;
                 await client
                     .NewCompleteJobCommand(job.Key)
                     .Variables("{\"cats\":" + catsCount + "}")
@@ -77,7 +75,7 @@ namespace BePart.Data_Service
 
         public void CreateMakeCatWorker()
         {
-            _createWorker(
+            CreateWorker(
                 "make-cat", async (client, job) =>
             {
                 await Console.Out.WriteLineAsync($"Make cat Recieved job: {job}");
@@ -86,7 +84,10 @@ namespace BePart.Data_Service
 
                 using var scope = _serviceProvider.CreateScope();
                 var catService = scope.ServiceProvider.GetService<ICatService>();
-                catService.AddCat(cat);
+                if (cat != null)
+                {
+                    catService?.AddCat(cat);
+                }
 
                 await client
                     .NewCompleteJobCommand(job.Key)
@@ -120,7 +121,7 @@ namespace BePart.Data_Service
             return _client.TopologyRequest().Send();
         }
 
-        private void _createWorker(string jobType, JobHandler handleJob)
+        private void CreateWorker(string jobType, JobHandler handleJob)
         {
             _client.NewWorker()
                 .JobType(jobType)
