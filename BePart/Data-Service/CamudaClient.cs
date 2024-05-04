@@ -62,13 +62,20 @@ namespace BePart.Data_Service
             CreateWorker("get-cats", async (client, job) =>
             {
                 await Console.Out.WriteLineAsync($"Recieved job: {job}");
-
+                var noOfCats = job.Variables;
                 using var scope = _serviceProvider.CreateScope();
+
+                var filter = JsonSerializer.Deserialize<CatsAge>(noOfCats);
+
                 var catService = scope.ServiceProvider.GetService<ICatService>();
-                var catsCount = catService?.GetAllCats().Count;
+                var catsCount = catService?.OlderThan(filter.catAge).Count;
+
+                var variables = "{\"cats\":" + catsCount + "}";
+                await Console.Out.WriteLineAsync($"Response: {variables}");
+
                 await client
                     .NewCompleteJobCommand(job.Key)
-                    .Variables("{\"cats\":" + catsCount + "}")
+                    .Variables(variables)
                     .Send();
             });
         }
@@ -130,8 +137,13 @@ namespace BePart.Data_Service
                 .Name(jobType)
                 .PollInterval(TimeSpan.FromSeconds(50))
                 .PollingTimeout(TimeSpan.FromSeconds(50))
-                .Timeout(TimeSpan.FromSeconds(10))
+                .Timeout(TimeSpan.FromHours(2))
                 .Open();
         }
+    }
+
+    public class CatsAge
+    {
+        public int catAge { get; set; }
     }
 }

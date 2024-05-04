@@ -72,5 +72,10 @@ namespace FePart
                 btnView.IsEnabled = false;
             }
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            new SearchWindow().Show();
+        }
     }
 }

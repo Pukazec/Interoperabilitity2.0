@@ -32,7 +32,7 @@ namespace FePart
             }
             else if (getById != null)
             {
-                HttpResponseMessage response = _httpClient.GetAsync($"Cat/{getById}").Result;
+                HttpResponseMessage response = _httpClient.GetAsync($"Cat/{getById}/id").Result;
                 if (response.IsSuccessStatusCode)
                 {
                     _selectedCat = response.Content.ReadFromJsonAsync<Cat>().Result;

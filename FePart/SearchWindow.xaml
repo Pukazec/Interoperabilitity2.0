@@ -1,0 +1,23 @@
+﻿<Window x:Class="FePart.SearchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FePart"
+        mc:Ignorable="d"
+        Title="SearchWindow" Height="450" Width="800">
+    <Grid>
+        <TextBox x:Name="txtNameSearch" HorizontalAlignment="Left" Margin="176,25,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="247"/>
+        <Button Content="Close" HorizontalAlignment="Left" Margin="45,379,0,0" VerticalAlignment="Top" Click="Close_Click" Height="45" Width="130"/>
+        <Label Content="Name" HorizontalAlignment="Left" Margin="45,72,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
+        <Label Content="Age" HorizontalAlignment="Left" Margin="45,125,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
+        <Label Content="Color" HorizontalAlignment="Left" Margin="45,177,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
+        <Label Content="Summary" HorizontalAlignment="Left" Margin="45,222,0,0" VerticalAlignment="Top" Height="25" Width="95"/>
+        <TextBox x:Name="catName" HorizontalAlignment="Left" Height="25" Margin="321,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="102"/>
+        <TextBox x:Name="catAge" HorizontalAlignment="Left" Height="25" Margin="321,125,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102"/>
+        <TextBox x:Name="catColor" HorizontalAlignment="Left" Height="25" Margin="321,177,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="102"/>
+        <TextBox x:Name="catSummary" HorizontalAlignment="Left" Margin="321,227,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="86" Width="217"/>
+        <Button Content="Search" HorizontalAlignment="Left" Margin="438,24,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Label Content="Cat name" HorizontalAlignment="Left" Margin="45,19,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>

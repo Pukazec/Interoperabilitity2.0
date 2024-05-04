@@ -46,3 +46,11 @@ Content-Type: application/json
 DELETE {{BePart_HostAddress}}/Cat/11
 
 ###
+
+GET {{BePart_HostAddress}}/serialization/Serialize
+
+###
+
+GET {{BePart_HostAddress}}/serialization/Deserialize
+
+###

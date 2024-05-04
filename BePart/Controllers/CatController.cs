@@ -1,6 +1,7 @@
 using BePart.ActiveMQ;
 using BePart.Data;
 using Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -9,19 +10,17 @@ namespace BePart.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public abstract class ApiControllerBase : ControllerBase
     {
     }
 
     public class CatController(ICatService catService, CatDbContext context) : ApiControllerBase
     {
-        private readonly ICatService _catService = catService;
-        private readonly CatDbContext _context = context;
-
         [HttpGet]
         public IActionResult GetAllCats()
         {
-            var cats = _catService.GetAllCats();
+            var cats = catService.GetAllCats();
             var producer = new ActiveMQProducer("cats gotten");
             producer.SendMessage(JsonSerializer.Serialize(cats).ToString());
             return Ok(cats);
@@ -30,9 +29,10 @@ namespace BePart.Controllers
         [HttpGet("{id}/id")]
         public IActionResult GetCatById(int id)
         {
-            var cat = _catService.GetCatById(id);
+            var cat = catService.GetCatById(id);
             if (cat == null)
             {
+                //throw new Exception("Cat not found");
                 return NotFound();
             }
             var producer = new ActiveMQProducer("get one cat");
@@ -40,11 +40,12 @@ namespace BePart.Controllers
             return Ok(cat);
         }
 
-        [HttpGet("{name}")]
-        public IActionResult GetCatByName(string name)
+        [HttpGet("{name}/injection")]
+        public IActionResult GetCatByNameInjection(string name)
         {
-            string query = "SELECT * FROM CAT WHERE CATNAME = '" + name + "'";
-            var cat = _context.Database.ExecuteSqlRaw(query);
+            // SQL injection detected!!!!!
+            string query = "SELECT top 1 * FROM CAT WHERE CATNAME LIKE '%" + name + "%'";
+            var cat = context.Database.SqlQueryRaw<Cat>(query).SingleOrDefault();
 
             return Ok(cat);
         }
@@ -52,7 +53,7 @@ namespace BePart.Controllers
         [HttpPost]
         public IActionResult AddCat([FromBody] Cat cat)
         {
-            _catService.AddCat(cat);
+            catService.AddCat(cat);
             return CreatedAtAction(nameof(GetCatById), new { id = cat.Id }, cat);
         }
 
@@ -61,30 +62,39 @@ namespace BePart.Controllers
         {
             if (id != cat.Id)
             {
-                return BadRequest();
+                cat.Id = id;
             }
 
-            var existingCat = _catService.GetCatById(id);
+            var existingCat = catService.GetCatById(id);
             if (existingCat == null)
             {
                 return NotFound();
             }
 
-            _catService.UpdateCat(cat);
+            cat.Id = id;
+            catService.UpdateCat(cat);
             return NoContent();
+        }
+
+        [HttpGet("{name}")]
+        public IActionResult GetCatByName(string name)
+        {
+            var cat = context.Cats.FirstOrDefault(x => x.CatName.Contains(name));
+
+            return Ok(cat);
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteCat(int id)
         {
-            var cat = _catService.GetCatById(id);
+            var cat = catService.GetCatById(id);
             if (cat == null)
             {
                 return NotFound();
             }
 
-            _catService.DeleteCat(id);
-            return NoContent();
+            catService.DeleteCat(id);
+            return Ok(id);
         }
     }
 }

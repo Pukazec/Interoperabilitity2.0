@@ -1,9 +1,11 @@
 ﻿using Dtos;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SharedData;
 
 namespace BePart
 {
-    public class CatDbContext : DbContext
+    public class CatDbContext : IdentityDbContext//<ExtendedIdentityUser>
     {
         public CatDbContext(DbContextOptions options)
             : base(options)
@@ -12,9 +14,18 @@ namespace BePart
 
         public DbSet<Cat> Cats { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public DbSet<ExtendedIdentityUser> ExtendedUsers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.Entity<Cat>().HasData(
+            var test = new Random().Next(2) == 0;
+            if (test)
+            {
+                Console.WriteLine("test");
+            }
+            base.OnModelCreating(builder);
+
+            builder.Entity<Cat>().HasData(
                 new Cat { Id = 1, Age = 3.5, Color = "Black", CatName = "Shadow", Summary = "A stealthy little shadow that loves to sneak around." },
                 new Cat { Id = 2, Age = 2, Color = "White", CatName = "Snowball", Summary = "Fluffy and white as the fresh winter snow." },
                 new Cat { Id = 3, Age = 4, Color = "Ginger", CatName = "Tiger", Summary = "Loves to play and chase lasers." },

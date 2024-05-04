@@ -1,10 +1,12 @@
 ﻿using BePart.Data_Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BePart.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ZeebeController(IZeebeService zeebeService) : ControllerBase
     {
         private readonly IZeebeService _zeebeService = zeebeService;

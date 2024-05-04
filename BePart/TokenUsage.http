@@ -1,0 +1,32 @@
+@BePart_HostAddress = http://localhost:5074
+@AuthenticationUrl = {{BePart_HostAddress}}/Authentication
+@TokenUsageUrl = {{BePart_HostAddress}}/TokenUsage
+
+@AccessToken = eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBZG1pbiIsImV4cCI6MTcxMzYxNDM2MH0.bCcvznX1abAA7666RRfdExjo46M2D5UQo54GETIL5q4
+@RefreshToken = hJyWeDlPdRqwq+HWYbPjdehdp1DtGPw1JC8yBg9H83jvOuE0SSa9vTW3w3kRzKzjB/pT7Sdo18oKMV0s9SXhjw==
+
+###
+
+POST {{AuthenticationUrl}}/Login
+Content-Type: application/json
+
+{
+  "userName": "admin",
+  "password": "admin"
+}
+
+###
+
+POST {{AuthenticationUrl}}/RefreshToken
+Content-Type: application/json
+
+{
+  "refreshToken": "{{RefreshToken}}"
+}
+
+###
+
+GET {{TokenUsageUrl}}
+Accept: application/json
+Authorization: Bearer {{AccessToken}}
+

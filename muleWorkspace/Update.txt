@@ -1,0 +1,1 @@
+Put: "" as Binary {base: "64"} as Binary {encoding: "UTF-8", mediaType: "*/*; charset=UTF-8", mimeType: "*/*", class: "org.mule.runtime.core.internal.streaming.bytes.ManagedCursorStreamProvider", contentLength: 0}

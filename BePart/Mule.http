@@ -1,0 +1,25 @@
+@Mule_HostAddress = http://localhost:8081
+###
+
+GET {{Mule_HostAddress}}
+Accept: application/json
+
+###
+
+POST {{Mule_HostAddress}}/Create
+Content-Type: application/json
+
+{"age": 8,"color": "Green","catName": "Micko","summary": "Lood ko pushka"}
+###
+
+
+PUT {{Mule_HostAddress}}/Update/18
+Content-Type: application/json
+
+{"age": 10,"color": "Blau","catName": "Cicko","summary": "Lood ko pushka"}
+###
+
+
+DELETE {{Mule_HostAddress}}/Delete/18
+
+###
