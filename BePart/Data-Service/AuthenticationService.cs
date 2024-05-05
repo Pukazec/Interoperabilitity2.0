@@ -13,16 +13,22 @@ namespace BePart
         Task<LoginResponse> Login(LoginUser user);
         Task<LoginResponse> RefreshToken(RefreshTokenModel model);
         Task<bool> RegisterUser(LoginUser user);
+        Task<bool> RegisterRole(string roleName);
     }
     public class AuthenticationService : IAuthenticationService
     {
         private readonly UserManager<ExtendedIdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly CatDbContext _context;
         private readonly IConfiguration _config;
 
-        public AuthenticationService(UserManager<ExtendedIdentityUser> userManager, IConfiguration config, CatDbContext context)
+        public AuthenticationService(UserManager<ExtendedIdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IConfiguration config,
+            CatDbContext context)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _config = config;
             _context = context;
         }
@@ -50,7 +56,7 @@ namespace BePart
             }
 
             response.IsLogedIn = true;
-            response.JwtToken = GenerateTokenString(identityUser.Email);
+            response.JwtToken = GenerateTokenString(identityUser.Email, await _userManager.GetRolesAsync(identityUser));
             response.RefreshToken = GenerateRefreshTokenString();
 
             identityUser.RefreshToken = response.RefreshToken;
@@ -73,7 +79,8 @@ namespace BePart
                 return response;
 
             response.IsLogedIn = true;
-            response.JwtToken = GenerateTokenString(identityUser.Email);
+            response.JwtToken = GenerateTokenString(identityUser.Email,
+            await _userManager.GetRolesAsync(identityUser));
             response.RefreshToken = GenerateRefreshTokenString();
 
             identityUser.RefreshToken = response.RefreshToken;
@@ -95,13 +102,17 @@ namespace BePart
             return Convert.ToBase64String(randomNumber);
         }
 
-        private string GenerateTokenString(string userName)
+        private string GenerateTokenString(string userName, IList<string> roles)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,userName),
-                new Claim(ClaimTypes.Role,"Admin"),
+                new(ClaimTypes.Name,userName),
             };
+
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
             var staticKey = _config.GetSection("Jwt:Key").Value;
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(staticKey));
@@ -117,6 +128,14 @@ namespace BePart
 
             string tokenString = new JwtSecurityTokenHandler().WriteToken(securityToken);
             return tokenString;
+        }
+
+        public async Task<bool> RegisterRole(string roleName)
+        {
+            var identityRole = new IdentityRole(roleName);
+
+            var result = await _roleManager.CreateAsync(identityRole);
+            return result.Succeeded;
         }
     }
 }

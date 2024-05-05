@@ -47,6 +47,7 @@ namespace BePart.Controllers
             using var stream = File.Open(fileName, FileMode.Create);
             using var binaryWriter = new BinaryWriter(stream, Encoding.UTF8, false);
 
+            binaryWriter.Write(cat.Id);
             binaryWriter.Write(cat.Age);
             binaryWriter.Write(cat.CatName);
             binaryWriter.Write(cat.Color);
@@ -64,25 +65,28 @@ namespace BePart.Controllers
                 throw new Exception("Invalid data type.");
             }
 
-            var deserializedCat = new
-            {
-                Age = binaryReader.ReadDouble(),
-                CatName = binaryReader.ReadString(),
-                Color = binaryReader.ReadString(),
-                Summary = binaryReader.ReadString(),
-            };
+            var catId = binaryReader.ReadInt32();
+            var catAge = binaryReader.ReadDouble();
+            var catName = binaryReader.ReadString();
+            var catColor = binaryReader.ReadString();
+            var catSummary = binaryReader.ReadString();
 
-            if (!DeserializationValidator.IsAllowedType(deserializedCat.GetType()))
+            if (!DeserializationValidator.IsAllowedType(catId.GetType()) ||
+                !DeserializationValidator.IsAllowedType(catAge.GetType()) ||
+                !DeserializationValidator.IsAllowedType(catName.GetType()) ||
+                !DeserializationValidator.IsAllowedType(catColor.GetType()) ||
+                !DeserializationValidator.IsAllowedType(catSummary.GetType()))
             {
                 throw new Exception("Invalid data type.");
             }
 
             return new Cat
             {
-                Age = deserializedCat.Age,
-                CatName = deserializedCat.CatName,
-                Color = deserializedCat.Color,
-                Summary = deserializedCat.Summary,
+                Id = catId,
+                Age = catAge,
+                CatName = catName,
+                Color = catColor,
+                Summary = catSummary,
             };
         }
     }
@@ -91,7 +95,12 @@ namespace BePart.Controllers
     {
         private static readonly HashSet<Type> _allowedTypes = new HashSet<Type>
         {
-            typeof(Cat)
+            typeof(Cat),
+            typeof(int),
+            typeof(string),
+            typeof(double),
+            typeof(float),
+            typeof(bool),
         };
 
         public static bool IsAllowedType(Type type)

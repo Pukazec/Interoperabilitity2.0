@@ -5,13 +5,20 @@ namespace BePart.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    [Authorize]
-    public class TokenUsageController : Controller
+    public class TokenUsageController() : Controller
     {
-        [HttpGet]
+        [HttpGet("user")]
+        [Authorize(Roles = "User")]
         public async Task<string> Get()
         {
             return "Bokic popi si sokic.";
+        }
+
+        [HttpGet("admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<string> GetAdmin()
+        {
+            return "Bokic popi si sampanjcic.";
         }
     }
 }

@@ -26,6 +26,16 @@ namespace BePart.Controllers
             return BadRequest("Something went wrong");
         }
 
+        [HttpPost("RegisterRole")]
+        public async Task<IActionResult> RegisterRole(string role)
+        {
+            if (await _authenticationService.RegisterRole(role))
+            {
+                return Ok("Successfully done");
+            }
+            return BadRequest("Something went wrong");
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginUser user)
         {
